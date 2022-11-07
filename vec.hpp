@@ -12,27 +12,48 @@ public:
 
     vec(std::initializer_list<K> list) : v(list) {};
 
-    void add(vec<K> &other) {
+    vec<K> &add(const vec<K> &other) {
         if (v.size() != other.v.size())
             throw "Vectors must be of the same size";
         for (int i = 0; i < v.size(); i++)
             v[i] += other.v[i];
+        return *this;
     }
 
-    void sub(vec<K> &other) {
+    vec<K> &sub(const vec<K> &other) {
         if (v.size() != other.v.size())
             throw "Vectors must be of the same size";
         for (int i = 0; i < v.size(); i++)
             v[i] -= other.v[i];
+        return *this;
     }
 
-    void scl(K scalar) {
+    template <typename T>
+    vec<K> &scl(const T scalar) {
         for (int i = 0; i < v.size(); i++)
             v[i] *= scalar;
+        return *this;
     }
 
-    //fn sub(&mut self, v: &Vector<K>);
-    //fn scl(&mut self, a: K);
+    vec<K> &operator+=(const vec<K> &other) {
+        return add(other);
+    }
+
+    vec<K> operator+(const vec<K> &other) const {
+        vec<K> ret(*this);
+        return ret.add(other);
+    }
+
+    template <typename T>
+    vec<K> &operator*=(const T &other) {
+        return scl(other);
+    }
+
+    template <typename T>
+    vec<K> operator*(const T &other) const {
+        vec<K> ret(*this);
+        return ret.scl(other);
+    }
 
     size_t size() const { return v.size(); }
 
@@ -43,8 +64,9 @@ public:
     }
 
     K &operator[](int i) { return v[i]; }
+    const K &operator[](int i) const { return v[i]; }
 
-    friend std::ostream &operator<<(std::ostream &os, vec &v) {
+    friend std::ostream &operator<<(std::ostream &os, vec v) {
         os << "[";
         for (int i = 0; i < v.size(); i++) {
             os << v[i];

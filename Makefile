@@ -4,7 +4,7 @@ OBJ = $(SRC:.cpp=.o)
 FLAGS = -D DEBUG
 
 all: $(OBJ)
-	g++ $(FLAGS) $^
+	g++ $(FLAGS) $(OBJ) 
 
 run: all
 	./a.out

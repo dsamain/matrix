@@ -1,6 +1,4 @@
-#include <iostream>
-#include "matrix.hpp"
-#include "vec.hpp"
+#include "inc.hpp"
 
 using namespace std;
 
@@ -13,6 +11,8 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #else
 # define dbg(x)
 #endif
+
+#define show_func(x) cout << #x << " = " << x << endl;
 
 int main() {
 
@@ -56,8 +56,6 @@ int main() {
         vector<vec<int>> v = {{1, 2, 3}, {3, 2, 1}, {0, 0, 0}};
         vector<int> coefs = {1, 2, 3};
 
-
-
         vec<int> res = linear_combination(v, coefs);
         for (int i = 0; i < v.size(); i++) {
             cout << (i == 0 ? "  " : "+ ") << v[i] << " * " << coefs[i] << endl;
@@ -65,6 +63,20 @@ int main() {
         cout << "= " << res << endl;
 
     }
+    {   cout << "\n_____________lerp_____________\n\n";
+
+        show_func(lerp(vec<float>({1, 1, 1}), vec<float>({-1,-1,-1}), 0.5));
+        show_func(lerp(vec<int>({4, 8, 16}), vec<int>({-1, 12, 14}), 0.5));
+        show_func(lerp(vec<int>({1}), vec<int>({0}), 0));
+        show_func(lerp(0, 42, 0.5));
 
 
+    }
+    { cout << "\n_____________dot_____________\n\n";
+
+        //cout << dot(vec<int>(3, 1), vec<int>(3, 1)) << endl;
+        show_func(dot(vec<int>({1, 2, 4, 8}), vec<int>(4, -1)));
+        show_func(dot(vec<int>({10, 3, 1}), vec<int>({3, 3, 3})));
+        show_func(dot(vec<int>({10, 3, 1}), vec<int>({3, 3, 3})));
+    }
 }
