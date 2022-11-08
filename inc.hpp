@@ -2,6 +2,6 @@
 #include "matrix.hpp"
 #include "vec.hpp"
 #include "fun.hpp"
+#include "macro.hpp"
 
-//template <typename V>
-//V lerp(V u, V v, float t);
+using namespace std;
