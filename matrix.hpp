@@ -56,6 +56,67 @@ public:
         return ret;
     }
 
+    matrix<K> row_echelon() {
+        matrix<K> ret(*this);
+        int lead = 0;
+        for (int r = 0; r < ret.size()[0]; r++) {
+            if (lead >= ret.size()[1])
+                return ret;
+            int i = r;
+            while (ret[i][lead] == 0) {
+                i++;
+                if (i == ret.size()[0]) {
+                    i = r;
+                    lead++;
+                    if (lead == ret.size()[1])
+                        return ret;
+                }
+            }
+            swap(ret[i], ret[r]);
+            double lv = ret[r][lead];
+            for (int j = 0; j < ret.size()[1]; j++)
+                ret[r][j] /= lv;
+            for (int i = 0; i < ret.size()[0]; i++) {
+                if (i != r) {
+                    lv = ret[i][lead];
+                    for (int j = 0; j < ret.size()[1]; j++)
+                        ret[i][j] -= lv * ret[r][j];
+                }
+            }
+            lead++;
+        }
+        return ret;
+    }
+
+    matrix<K> inverse() {
+        if (this->size()[0] != this->size()[1])
+            ERR("Matrix must be square");
+        if (determinant(*this) == 0)
+            ERR("Matrix is not invertible");
+
+        matrix<K> ret(this->size()[0], this->size()[1] * 2);
+
+        for (int i = 0; i < this->size()[0]; i++)
+            for (int j = 0; j < this->size()[1]; j++)
+                ret[i][j] = this->operator[](i)[j];
+        for (int i = 0; i < this->size()[0]; i++)
+            ret[i][i + this->size()[1]] = 1;
+
+        ret = ret.row_echelon();
+
+        for (int i = 0; i < this->size()[0]; i++)
+            for (int j = 0; j < this->size()[1]; j++)
+                ret[i][j] = ret[i][j + this->size()[1]];
+        
+        matrix<K> ret2(this->size()[0], this->size()[1]);
+        for (int i = 0; i < this->size()[0]; i++)
+            for (int j = 0; j < this->size()[1]; j++)
+                ret2[i][j] = ret[i][j];
+            
+        return ret2;
+
+    }
+
     std::vector<size_t> size() const { 
         return {v.size(), (v.size() ? v[0].size() : 0)}; 
     }
@@ -137,5 +198,27 @@ matrix<K> mul_mat(const matrix<K> &u, const matrix<K> &v) {
         for (size_t j = 0; j < v.size()[1]; j++)
             for (size_t k = 0; k < u.size()[1]; k++)
                 ret[i][j] += u[i][k] * v[k][j];
+    return ret;
+}
+
+template <typename K>
+K determinant(const matrix<K> &m) {
+    if (m.size()[0] != m.size()[1])
+        ERR("Matrix must be square");
+    if (m.size()[0] == 1)
+        return m[0][0];
+    K ret = 0;
+    matrix<K> cur(m.size()[0] - 1, m.size()[1] - 1);
+    for (int i = 0; i < m.size()[1]; i++) {
+        for (int j = 1; j < m.size()[0]; j++) {
+            for (int k = 0; k < m.size()[1]; k++) {
+                if (k < i)
+                    cur[j - 1][k] = m[j][k];
+                else if (k > i)
+                    cur[j - 1][k - 1] = m[j][k];
+            }
+        }
+        ret += m[0][i] * determinant(cur) * (i % 2 == 0 ? 1 : -1);
+    }
     return ret;
 }

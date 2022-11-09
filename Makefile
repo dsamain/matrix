@@ -1,10 +1,10 @@
 SRC = main.cpp
 OBJ = $(SRC:.cpp=.o)
 
-FLAGS = -D DEBUG
+FLAGS = -D DEBUG -std=c++11
 
-all: $(OBJ)
-	g++ $(FLAGS) $(OBJ) 
+all: 
+	g++ $(FLAGS) $(SRC) 
 
 run: all
 	./a.out

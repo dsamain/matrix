@@ -1,9 +1,5 @@
 #include "inc.hpp"
 
-#define DEBUG
-
-
-
 int main() {
 
     {
@@ -28,14 +24,14 @@ int main() {
         matrix<int> m(2, 2, 1);
         matrix<int> m2(2, 2, 3);
         cout << "m, m2 : " << m << " " << m2 << endl;
-        put(m.add(m2));
-        put(m.sub(m2));
-        put(m.scl(42));
+        put_m(m.add(m2));
+        put_m(m.sub(m2));
+        put_m(m.scl(42));
     }
 
     {
         cout << "\n_____________Linear_combination_____________\n\n";
-        vector<vec<int>> v = {{1, 2, 3}, {3, 2, 1}, {0, 0, 0}};
+        vector<vec<int> > v = {{1, 2, 3}, {3, 2, 1}, {0, 0, 0}};
         vector<int> coefs = {1, 2, 3};
 
         vec<int> res = linear_combination(v, coefs);
@@ -81,10 +77,10 @@ int main() {
         put(cross_product(vec<double>({0,0,1}), vec<double>({1,0,0})));
     }
     { cout << "\n_____________Matrix_multiplication_____________\n\n";
-        put(mul_vec(matrix<int>({{1, 2}, {3, 4}}), vec<int>({2, 2})));
-        put(mul_vec(matrix<int>({{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}), vec<int>({1, 2, 3})));
-        put(mul_mat(matrix<int>({{1, 0}, {0, 1}}), matrix<int>({{1, 2}, {3, 4}})));
-        put(mul_mat(matrix<int>({{3, 1}, {42, 69}}), matrix<int>({{1, 2}, {3, 4}})));
+        put_m(mul_vec(matrix<int>({{1, 2}, {3, 4}}), vec<int>({2, 2})));
+        put_m(mul_vec(matrix<int>({{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}), vec<int>({1, 2, 3})));
+        put_m(mul_mat(matrix<int>({{1, 0}, {0, 1}}), matrix<int>({{1, 2}, {3, 4}})));
+        put_m(mul_mat(matrix<int>({{3, 1}, {42, 69}}), matrix<int>({{1, 2}, {3, 4}})));
     }
     { cout << "\n_____________Trace_____________\n\n";
         put(matrix<int>({{1, 2}, {3, 4}}).trace());
@@ -92,8 +88,21 @@ int main() {
         put(matrix<int>({{-2, -8, 4}, {1, -23, 4}, {0, 6, 4}}).trace());
     }
     { cout << "\n_____________Transpose_____________\n\n";
-        put(matrix<int>({{-2, -8, 4}, {1, -23, 4}, {0, 6, 4}}).transpose());
-        put(matrix<int>({{1,3,5}, {2,5,6}}).transpose());
-        put(matrix<int>({{1}, {1}, {1}}).transpose());
+        put_m(matrix<int>({{-2, -8, 4}, {1, -23, 4}, {0, 6, 4}}).transpose());
+        put_m(matrix<int>({{1,3,5}, {2,5,6}}).transpose());
+        put_m(matrix<int>({{1}, {1}, {1}}).transpose());
+    }
+    { cout << "\n_____________Reduced_row_echelon_____________\n\n";
+        put_m(matrix<double>({{1.,2.},{2.,4.}}).row_echelon());
+        put_m(matrix<double>({{8., 5., -2., 4., 28.}, {4., 2.5, 20., 4., -4.}, {8., 5., 1., 4., 17.}}).row_echelon());
+        put_m(matrix<int>({{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).row_echelon());
+    }
+    { cout << "\n_____________Determinant_____________\n\n";
+        put(determinant(matrix<int>({{2, 0, 0}, {0, 2, 0}, {0, 0, 2}})));
+        put(determinant(matrix<double>({{8., 5., -2., 4.}, {4., 2.5, 20., 4.}, {8., 5., 1., 4.}, {28., -4., 17., 1.}})));
+        put(determinant(matrix<int>({{1, 2, 3}, {4, 5, 6}, {7, 8, 9}})));
+    }
+    { cout << "\n_____________Inverse_____________\n\n";
+        put(matrix<double>({{8., 5., -2.}, {4., 7., 20.}, {7., 6., 1.} }));
     }
 }
