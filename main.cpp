@@ -113,4 +113,7 @@ int main() {
         put(matrix<int>({{1, 2, 3}, {2, 4, 6}, {3, 6, 9}}).rank());
         put(matrix<int>({{0, 0}, {0, 0}}).rank());
     }
+    { cout << "\n_____________Projection_____________\n\n";
+        put(projection(90, 16/9., 0.1, 1000));
+    }
 }

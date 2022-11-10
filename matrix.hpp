@@ -125,7 +125,6 @@ public:
         return r;
     }
 
-
     std::vector<size_t> size() const { 
         return {v.size(), (v.size() ? v[0].size() : 0)}; 
     }
@@ -231,3 +230,11 @@ K determinant(const matrix<K> &m) {
     }
     return ret;
 }
+
+matrix<float> projection(float fov, float ratio, float near, float far) {
+    return matrix<float>({{1 / (ratio * (float)tan(fov / 2)), 0, 0, 0},
+                            {0, 1 / (float)tan(fov / 2), 0, 0},
+                            {0, 0, (far + near) / (near - far), 2 * far * near / (near - far)},
+                            {0, 0, -1, 0}});
+}
+
