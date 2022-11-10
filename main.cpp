@@ -114,6 +114,6 @@ int main() {
         put(matrix<int>({{0, 0}, {0, 0}}).rank());
     }
     { cout << "\n_____________Projection_____________\n\n";
-        put(projection(90, 16/9., 0.1, 1000));
+        put_m(projection(90, 1, 1, 15));
     }
 }
