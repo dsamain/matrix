@@ -87,35 +87,44 @@ public:
         }
         return ret;
     }
-
+    
     matrix<K> inverse() {
         if (this->size()[0] != this->size()[1])
-            ERR("Matrix must be square");
+            ERR("Matrix must be square\n");
         if (determinant(*this) == 0)
-            ERR("Matrix is not invertible");
+            ERR("Matrix is not invertible\n");
 
-        matrix<K> ret(this->size()[0], this->size()[1] * 2);
-
-        for (int i = 0; i < this->size()[0]; i++)
-            for (int j = 0; j < this->size()[1]; j++)
-                ret[i][j] = this->operator[](i)[j];
-        for (int i = 0; i < this->size()[0]; i++)
-            ret[i][i + this->size()[1]] = 1;
-
-        ret = ret.row_echelon();
+        matrix<K> aug(this->size()[0], this->size()[1] * 2);
 
         for (int i = 0; i < this->size()[0]; i++)
             for (int j = 0; j < this->size()[1]; j++)
-                ret[i][j] = ret[i][j + this->size()[1]];
-        
-        matrix<K> ret2(this->size()[0], this->size()[1]);
+                aug[i][j] = this->operator[](i)[j];
         for (int i = 0; i < this->size()[0]; i++)
-            for (int j = 0; j < this->size()[1]; j++)
-                ret2[i][j] = ret[i][j];
-            
-        return ret2;
+            aug[i][i + this->size()[1]] = 1;
+
+        aug = aug.row_echelon();
+        matrix<K> ret(this->size()[0], this->size()[0]);
+        for (size_t i = 0; i < this->size()[0]; i++) {
+            for (int j = 0; j < this->size()[0]; j++) {
+                ret[i][j] = aug[i][j + this->size()[1]];
+            }
+        }
+        return ret;
 
     }
+
+    size_t rank() {
+        matrix<K> ret = this->row_echelon();
+        size_t r = 0;
+        bool f = true;
+        for (int i = 0; i < ret.size()[0]; i++, f = true) {
+            for (int j = 0; j < ret.size()[1]; j++)
+                f &= ret[i][j] == 0;
+            r += !f;
+        }
+        return r;
+    }
+
 
     std::vector<size_t> size() const { 
         return {v.size(), (v.size() ? v[0].size() : 0)}; 
